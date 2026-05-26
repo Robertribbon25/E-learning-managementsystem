@@ -1,0 +1,6 @@
+{
+  "name": "Online Student Management System",
+  "description": "A comprehensive school, college, and training institution management system with student, teacher, and course views.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
