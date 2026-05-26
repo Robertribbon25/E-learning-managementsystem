@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { User, Phone, MapPin, Award, BookOpen, GraduationCap, Save, Shield, BadgeCheck, Zap } from 'lucide-react';
@@ -111,4 +110,151 @@ export default function Profile() {
 
             <div className="space-y-1">
               <h2 className="text-xl font-black text-slate-900 tracking-tight leading-snug">{user?.name}</h2>
-              <p className="text-xs text-slate-400 font-medium truncate max-w
+              <p className="text-xs text-slate-400 font-medium truncate max-w-full italic">{user?.email}</p>
+            </div>
+
+            {/* Clearances Pill Badge */}
+            <span className="inline-flex items-center rounded-full bg-slate-50 border border-slate-100 px-4 py-1.5 text-[11px] font-bold text-slate-700 uppercase tracking-wide shadow-slate-100 shadow-inner group transition-colors hover:bg-indigo-50 hover:border-indigo-100 hover:text-indigo-800">
+              <Shield className="h-3.5 w-3.5 mr-1.5 text-indigo-400 group-hover:text-indigo-500" />
+              {user?.role} Clearances
+            </span>
+
+            {/* Role-Specific Systemic Keys List */}
+            <div className="w-full border-t border-slate-100 pt-6 text-left text-xs space-y-3.5 text-slate-600 bg-slate-50/50 rounded-xl p-6 mt-6 border-b border-slate-100 shadow-inner group transition-colors hover:bg-slate-100/50">
+              <p className="border-b border-slate-100 pb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">System Identifiers</p>
+              {user?.role === 'student' && (
+                <>
+                  <div className="flex justify-between items-center"><span className="font-semibold text-slate-500">Class Section</span> <span className="font-medium">{user.profile?.class}</span></div>
+                  <div className="flex justify-between items-center"><span className="font-semibold text-slate-500">Roll Number</span> <span className="font-medium">{user.profile?.rollNumber}</span></div>
+                  <div className="flex justify-between items-center"><span className="font-semibold text-slate-500">Admission Code</span> <span className="font-medium">{user.profile?.admissionNumber}</span></div>
+                </>
+              )}
+              {user?.role === 'teacher' && (
+                <>
+                  <div className="flex justify-between items-center"><span className="font-semibold text-slate-500">Employee ID</span> <span className="font-medium">{user.profile?.employeeId}</span></div>
+                  <div className="flex justify-between items-center"><span className="font-semibold text-slate-500">Rank/Title</span> <span className="font-medium text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full font-bold">{user.profile?.designation}</span></div>
+                  <div className="flex justify-between items-center"><span className="font-semibold text-slate-500">Department</span> <span className="font-medium">{user.profile?.department}</span></div>
+                </>
+              )}
+              {user?.role === 'admin' && (
+                <p className="text-center text-indigo-700 py-3 text-sm font-semibold bg-indigo-50 border border-indigo-100 rounded-lg shadow-sm">Full administrative controls active.</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Dynamic Configuration Form */}
+        <div className="rounded-2xl border border-slate-100 bg-white p-8 shadow-sm lg:col-span-2 space-y-6 group hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between border-b border-slate-50 pb-5 mb-5">
+            <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Edit Coordinates & Lines</h2>
+            <span className="text-xs bg-indigo-50 text-indigo-600 font-semibold px-3 py-1 rounded-full group-hover:bg-indigo-100 transition-colors">Contact Specs</span>
+          </div>
+
+          <form onSubmit={handleUpdateContact} className="space-y-6">
+            
+            {/* Student Contact Parameters */}
+            {user?.role === 'student' && (
+              <>
+                <div className="group/field">
+                  <label className="block text-xs font-bold text-slate-400 mb-2 uppercase flex items-center gap-2 group-focus-within/field:text-indigo-600 transition-colors">
+                    <Phone className="h-4 w-4 text-slate-300 group-focus-within/field:text-indigo-400" />
+                    Mobile Contact phone
+                  </label>
+                  <input
+                    type="text"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full rounded-xl border border-slate-100 bg-slate-50/50 px-4 py-3 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 text-slate-800 placeholder-slate-400 transition-all shadow-inner group-focus-within/field:bg-white group-focus-within/field:shadow-none"
+                    placeholder="+1 (555) 000-0000"
+                  />
+                </div>
+
+                <div className="group/field">
+                  <label className="block text-xs font-bold text-slate-400 mb-2 uppercase flex items-center gap-2 group-focus-within/field:text-indigo-600 transition-colors">
+                    <MapPin className="h-4 w-4 text-slate-300 group-focus-within/field:text-indigo-400" />
+                    Physical Residence address
+                  </label>
+                  <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="w-full rounded-xl border border-slate-100 bg-slate-50/50 px-4 py-3 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 text-slate-800 placeholder-slate-400 transition-all shadow-inner group-focus-within/field:bg-white group-focus-within/field:shadow-none"
+                    placeholder="Street, City Details"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Teacher Contact/Profile Parameters */}
+            {user?.role === 'teacher' && (
+              <>
+                <div className="group/field">
+                  <label className="block text-xs font-bold text-slate-400 mb-2 uppercase flex items-center gap-2 group-focus-within/field:text-indigo-600 transition-colors">
+                    <GraduationCap className="h-4 w-4 text-slate-300 group-focus-within/field:text-indigo-400" />
+                    Qualifications summary
+                  </label>
+                  <input
+                    type="text"
+                    value={qualification}
+                    onChange={(e) => setQualification(e.target.value)}
+                    className="w-full rounded-xl border border-slate-100 bg-slate-50/50 px-4 py-3 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 text-slate-800 placeholder-slate-400 transition-all shadow-inner group-focus-within/field:bg-white group-focus-within/field:shadow-none"
+                    placeholder="M.Tech in CS / Education degree"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <div className="group/field">
+                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase flex items-center gap-2 group-focus-within/field:text-indigo-600 transition-colors">
+                      <Award className="h-4 w-4 text-slate-300 group-focus-within/field:text-indigo-400" />
+                      Designation clearance
+                    </label>
+                    <input
+                      type="text"
+                      value={designation}
+                      onChange={(e) => setDesignation(e.target.value)}
+                      className="w-full rounded-xl border border-slate-100 bg-slate-50/50 px-4 py-3 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 text-slate-800 placeholder-slate-400 transition-all shadow-inner group-focus-within/field:bg-white group-focus-within/field:shadow-none"
+                      placeholder="Lecturer"
+                    />
+                  </div>
+
+                  <div className="group/field">
+                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase flex items-center gap-2 group-focus-within/field:text-indigo-600 transition-colors">
+                      <Phone className="h-4 w-4 text-slate-300 group-focus-within/field:text-indigo-400" />
+                      Instructor Phone
+                    </label>
+                    <input
+                      type="text"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full rounded-xl border border-slate-100 bg-slate-50/50 px-4 py-3 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 text-slate-800 placeholder-slate-400 transition-all shadow-inner group-focus-within/field:bg-white group-focus-within/field:shadow-none"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Adminmaster Master Config Redirect */}
+            {user?.role === 'admin' && (
+              <div className="text-center py-10 px-6 bg-slate-50 rounded-xl border border-slate-100 border-dashed text-slate-500 shadow-inner group transition-colors hover:bg-indigo-50 hover:border-indigo-100 hover:text-indigo-800">
+                <Shield className="h-10 w-10 text-indigo-300 mx-auto mb-4" />
+                <p className="text-sm italic max-w-sm mx-auto font-medium leading-relaxed">
+                  AdminMaster master coordinates are controlled systemic configs. Local contact adjustments are locked.
+                </p>
+              </div>
+            )}
+
+            {/* Main Submit Action Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="mt-10 group flex w-full items-center justify-center gap-2.5 rounded-2xl bg-indigo-600 px-6 py-4 text-base font-extrabold text-white shadow-lg shadow-indigo-100 hover:shadow-indigo-200 hover:bg-indigo-500 transition-all disabled:opacity-55 disabled:cursor-not-allowed active:scale-[0.98]"
+            >
+              <Save className="h-5 w-5 text-indigo-300" />
+              <span>{isLoading ? 'System saving...' : 'Save System Variables'}</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
